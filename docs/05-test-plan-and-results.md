@@ -52,6 +52,22 @@ Full suite on the strengthened build, executed by the team in the same venue not
 
 This run includes all five SDK integration tests against the real installed `qniverse` package - Bell build, documented-`qasm()` round trip, parameterized build, parameterized round trip, and the multi-register QASM 3.0 build + round trip (`test_multiregister_qasm3_build_and_round_trip`: two quantum registers, cross-register `cx`, pairwise measurement, fidelity 1.0 through the documented export) - plus the 49 offline tests (parser, diagnostics, strict policy, equivalence, decomposition rules, builder fallback).
 
+## Remote platform job: converter output executed on QACC_Cluster (2026-11-14, 11:41 IST)
+
+Job **37982**, submitted through the Qniverse web composer by the team, ran this converter's exported QASM for `examples/bell_qasm2.qasm` (commit `22d1113`): resource `QACC_Cluster-CPU`, simulator `qasm_simulator`, noise off, 1024 shots, status **COMPLETED**.
+
+Result (`output.txt` from the platform's per-job export):
+
+```json
+{"probability": {"11": 518, "00": 506}, "shots": 1024}
+```
+
+This is the Bell-consistent distribution the PS's "compare measurement distributions of source and converted circuits" item asks for, now produced by the platform itself on the converted circuit.
+
+Provenance evidence: the job's exported `qasm_code.txt` matches this converter's `export_qasm` output for the example exactly apart from whitespace after commas (the composer re-serializes pasted input), and it contains the per-qubit expanded barrier (`barrier q[0], q[1];`) that this converter's export produces, which the raw example file (`barrier q;`) does not. This is consistency evidence, not a cryptographic trace. The job's other exported artifacts: `circuitImage.png`, `HistogramImage.png`, `photonicCircuitImage.png`.
+
+Cost observed: the account credit counter shown in the platform UI went from 150 (hackathon allocation) to 145 for this run - consistent with the dated 5-credits-per-CPU-simulation release note, and recorded here as the current observed charge.
+
 Separately observed on the platform the same day (teammate's account): a circuit job on the QACC_Cluster-CPU `qasm_simulator` (1024 shots, no noise) completed with the expected ~50/50 000/111 distribution, confirming platform job submission works at the venue. That job ran a hand-built circuit, not this converter's output; a converter-output platform run is optional additional evidence and carries a credit cost - the Qniverse release notes (v1.2.0, 04-Jul-2025, https://qniverse.in/release-notes/) document 5 credits per CPU simulation; the live balance can be checked with the documented `credit_balance()` job API before running.
 
 ## Equivalence method
