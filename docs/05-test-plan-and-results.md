@@ -39,7 +39,18 @@ $ python -m pytest tests/test_qniverse_integration.py -q
 4 passed in 1.09s
 ```
 
-The SDK-gated suite passes at the venue: Bell build + documented-`qasm()` round trip, and the parameterized (rx/crz/u3) round trip with statevector fidelity 1.0. A manual Bell conversion run in the same notebook printed `status: success`, `circuit: QniverseCircuit`, a clean re-parse of the exported QASM (`reparse errors: []`) and `statevector fidelity: 0.9999999999999996` (1.0 within float precision). A multi-register QASM 3.0 build + round-trip test (`test_multiregister_qasm3_build_and_round_trip`) was added to the SDK suite later the same day and is pending a venue run; its venue result belongs here once executed.
+The SDK-gated suite passes at the venue: Bell build + documented-`qasm()` round trip, and the parameterized (rx/crz/u3) round trip with statevector fidelity 1.0. A manual Bell conversion run in the same notebook printed `status: success`, `circuit: QniverseCircuit`, a clean re-parse of the exported QASM (`reparse errors: []`) and `statevector fidelity: 0.9999999999999996` (1.0 within float precision).
+
+## Results (venue Qniverse Jupyter Notebook, 2026-11-14, ~11:28 IST, commit 941aba2)
+
+Full suite on the strengthened build, executed by the team in the same venue notebook:
+
+```
+......................................................                   [100%]
+54 passed in 1.06s
+```
+
+This run includes all five SDK integration tests against the real installed `qniverse` package - Bell build, documented-`qasm()` round trip, parameterized build, parameterized round trip, and the multi-register QASM 3.0 build + round trip (`test_multiregister_qasm3_build_and_round_trip`: two quantum registers, cross-register `cx`, pairwise measurement, fidelity 1.0 through the documented export) - plus the 49 offline tests (parser, diagnostics, strict policy, equivalence, decomposition rules, builder fallback).
 
 Separately observed on the platform the same day (teammate's account): a circuit job on the QACC_Cluster-CPU `qasm_simulator` (1024 shots, no noise) completed with the expected ~50/50 000/111 distribution, confirming platform job submission works at the venue. That job ran a hand-built circuit, not this converter's output; a converter-output platform run is optional additional evidence and carries a credit cost - the Qniverse release notes (v1.2.0, 04-Jul-2025, https://qniverse.in/release-notes/) document 5 credits per CPU simulation; the live balance can be checked with the documented `credit_balance()` job API before running.
 

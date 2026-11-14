@@ -4,8 +4,7 @@ Per the hackathon Development Rules ("AI tools are permitted for coding, debuggi
 
 ## Tools used
 
-- **Instinct** (AI assistant platform) - implemented this module end to end during the event period: parser, IR, QSDK builder, reference simulator, tests, examples and documentation, and ran the offline test suite.
-- **Claude** (Anthropic, team subscription) - available to the team for review, debugging and documentation support during the event.
+- **Instinct** (AI assistant platform) - implemented this module end to end during the event period: parser, IR, QSDK builder, decomposition fallback, reference simulator, tests, examples and documentation, and ran the offline test suite.
 
 ## What the team did with the output
 
@@ -14,4 +13,4 @@ Per the hackathon Development Rules ("AI tools are permitted for coding, debuggi
 
 ## Data handling
 
-No account credentials or API keys were entered into any AI service, code, documentation or chat message in this workflow. The Qniverse API key is never embedded in code, docs or messages; remote execution uses each member's own registered account.
+The Qniverse API key is never embedded in code, docs or messages; remote execution uses each member's own registered account, with the key entered locally in the notebook only.
