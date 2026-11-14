@@ -11,6 +11,9 @@ interfaces only (QSDK documentation, "Creating a Circuit" and "Quantum Gates"):
   ``reset`` take qubit wires
 """
 
+import importlib
+import types
+
 from .ir import CircuitIR
 
 _ZERO_PARAM = {
@@ -25,21 +28,74 @@ _PARAM_GATES = {
 
 
 def _require_sdk():
-    try:
-        from Qniverse.QniverseCircuit import (  # noqa: N813
-            ClassicalRegister,
-            QniverseCircuit,
-            QuantumRegister,
-        )
-        import Qniverse.gates as qgates  # noqa: N813
-    except ImportError as exc:
+    """Import the Qniverse QSDK.
+
+    The documented package name is ``Qniverse``; the Qniverse Jupyter
+    Notebook ships the same SDK preinstalled as lowercase ``qniverse``
+    (verified 2026-11-14: class ``qniverse.QniverseCircuit.QniverseCircuit``,
+    Python 3.11 conda image). Both are accepted; documented names are
+    looked up in the package top level and its ``QniverseCircuit``
+    submodule, matching the layouts of both distributions.
+    """
+    pkg = None
+    for name in ("qniverse", "Qniverse"):  # noqa: N813
+        try:
+            pkg = importlib.import_module(name)
+            break
+        except ImportError:
+            continue
+    if pkg is None:
         raise ImportError(
             "The Qniverse QSDK is required to build QniverseCircuit objects. "
             "Install it with 'pip install qniverse' (see "
             "https://qniverse.in/docs-category/qsdk/introduction/getting_started.html) "
             "or run inside the Qniverse JupyterLab, where the SDK is provided."
-        ) from exc
-    return QniverseCircuit, QuantumRegister, ClassicalRegister, qgates
+        )
+    try:
+        circuit_mod = importlib.import_module(pkg.__name__ + ".QniverseCircuit")
+    except ImportError:
+        circuit_mod = None
+
+    def _find(attr):
+        # Prefer a non-module attribute: importing the QniverseCircuit
+        # submodule can leave a module object under the same name.
+        module_hit = None
+        for mod in (pkg, circuit_mod):
+            if mod is not None and hasattr(mod, attr):
+                obj = getattr(mod, attr)
+                if not isinstance(obj, types.ModuleType):
+                    return obj
+                module_hit = module_hit or obj
+        if module_hit is not None:
+            return module_hit
+        raise ImportError(
+            "the %r SDK distribution does not expose %s where the QSDK "
+            "documentation places it" % (pkg.__name__, attr)
+        )
+
+    try:
+        gates_mod = importlib.import_module(pkg.__name__ + ".gates")
+    except ImportError:
+        gates_mod = None
+
+    class _Gates:
+        """Gate lookup: documented ``gates`` submodule first, then the
+        package top level (the lowercase venue distribution re-exports the
+        gates there)."""
+
+        def __getattr__(self, attr):
+            for mod in (gates_mod, pkg):
+                if mod is not None and hasattr(mod, attr):
+                    return getattr(mod, attr)
+            raise AttributeError(attr)
+
+    qgates = _Gates()
+    return (
+        _find("QniverseCircuit"),
+        _find("QuantumRegister"),
+        _find("ClassicalRegister"),
+        qgates,
+    )
 
 
 def build_circuit(ir):

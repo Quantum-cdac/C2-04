@@ -15,7 +15,7 @@ Python 3.8+. Inside the Qniverse JupyterLab the SDK is already available and onl
 
 ## Running in the Qniverse Jupyter Notebook
 
-The platform's per-user Jupyter Notebook (side panel -> Launch Notebook; https://qniverse.in/docs/qniverse-labs-resources/) runs Python 3.9.13 with NumPy preinstalled - the converter's only hard dependency - so `python demo.py` works there as-is. First check `import Qniverse` in a cell: if the QSDK is present, the full suite including `tests/test_qniverse_integration.py` runs; if not, ask the organizers for the SDK distribution (public PyPI did not serve it on 2026-11-14).
+The platform's per-user Jupyter Notebook (side panel -> Launch Notebook; https://qniverse.in/docs/qniverse-labs-resources/) has the QSDK preinstalled as the lowercase package `qniverse` (verified in that notebook on 2026-11-14: the class is `qniverse.QniverseCircuit.QniverseCircuit`, gates are re-exported at package top level, and the image observed was a conda Python 3.11 rather than the documented 3.9.13 - the converter is parse-verified against both). The converter and the integration tests accept either `qniverse` or the documented `Qniverse` casing, so no install step is needed there: upload or clone this repository, run `python demo.py`, then `python -m pytest tests/ -q` (install pytest in a cell with `!pip install pytest` if it is absent).
 
 ## Usage
 

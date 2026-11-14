@@ -18,7 +18,7 @@ result.circuit                     # QniverseCircuit
 result.report.to_dict()            # status / warnings / unsupported / errors
 ```
 
-Building circuits needs the Qniverse QSDK (`pip install qniverse`, or the Qniverse JupyterLab where it is preinstalled). Parsing, diagnostics and the equivalence tests run without it.
+Building circuits needs the Qniverse QSDK (`pip install qniverse` per the official docs, or the Qniverse Jupyter Notebook where it is preinstalled as the lowercase `qniverse` package - both casings are accepted). Parsing, diagnostics and the equivalence tests run without it.
 
 ## Repository layout
 

@@ -5,13 +5,19 @@ JupyterLab). They are skipped automatically otherwise so the offline suite
 stays green. Run with: python -m pytest tests/test_qniverse_integration.py
 """
 
+import importlib.util
 import math
 
 import pytest
 
-qniverse = pytest.importorskip(
-    "Qniverse", reason="Qniverse QSDK not installed in this environment"
-)
+if (
+    importlib.util.find_spec("qniverse") is None
+    and importlib.util.find_spec("Qniverse") is None
+):
+    pytest.skip(
+        "Qniverse QSDK not installed in this environment",
+        allow_module_level=True,
+    )
 
 from qasm2qniverse import convert_qasm, parse_qasm  # noqa: E402
 from qasm2qniverse.simulator import simulate  # noqa: E402
