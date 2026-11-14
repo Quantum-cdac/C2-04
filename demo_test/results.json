@@ -1,0 +1,170 @@
+[
+ {
+  "case": "01_bell_qasm2",
+  "category": "A-sanity",
+  "result": "PASS",
+  "detail": "got {\"00\": 0.5, \"11\": 0.5}"
+ },
+ {
+  "case": "02_bell_qasm3",
+  "category": "A-sanity",
+  "result": "PASS",
+  "detail": "got {\"00\": 0.5, \"11\": 0.5}"
+ },
+ {
+  "case": "03_ghz3",
+  "category": "B-scope",
+  "result": "PASS",
+  "detail": "got {\"000\": 0.5, \"111\": 0.5}"
+ },
+ {
+  "case": "04_ccx_rz_demo",
+  "category": "B-scope",
+  "result": "PASS",
+  "detail": "got {\"000\": 0.5, \"111\": 0.5}"
+ },
+ {
+  "case": "05_multi_register",
+  "category": "B-scope",
+  "result": "PASS",
+  "detail": "got {\"100\": 1.0}"
+ },
+ {
+  "case": "06_param_expressions",
+  "category": "B-scope",
+  "result": "PASS",
+  "detail": "got {\"111\": 1.0}"
+ },
+ {
+  "case": "07_barrier_ok",
+  "category": "B-scope",
+  "result": "PASS",
+  "detail": "got {\"10\": 1.0}"
+ },
+ {
+  "case": "08_swap",
+  "category": "B-scope",
+  "result": "PASS",
+  "detail": "got {\"10\": 1.0}"
+ },
+ {
+  "case": "09_if_unsupported",
+  "category": "B-scope (fail loudly)",
+  "result": "PASS",
+  "detail": "status=partial; line 5: dynamic/classical construct 'if' is outside the supported subset"
+ },
+ {
+  "case": "10_for_unsupported",
+  "category": "B-scope (fail loudly)",
+  "result": "PASS",
+  "detail": "status=partial; line 4: custom gate definitions and composite blocks are outside the supported subset"
+ },
+ {
+  "case": "11_gatedef_unsupported",
+  "category": "B-scope (fail loudly)",
+  "result": "PASS",
+  "detail": "status=partial; line 4: custom gate definitions and composite blocks are outside the supported subset"
+ },
+ {
+  "case": "12_sx_no_qsdk_gate",
+  "category": "B-scope (fail loudly)",
+  "result": "PASS",
+  "detail": "status=partial; line 4: gate 'sx' is not in the supported QSDK gate subset"
+ },
+ {
+  "case": "13_bitorder_q0",
+  "category": "C-boundary",
+  "result": "PASS",
+  "detail": "got {\"001\": 1.0}"
+ },
+ {
+  "case": "14_max_index_q2",
+  "category": "C-boundary",
+  "result": "PASS",
+  "detail": "got {\"100\": 1.0}"
+ },
+ {
+  "case": "15_ccx_both_controls",
+  "category": "C-boundary",
+  "result": "PASS",
+  "detail": "got {\"111\": 1.0}"
+ },
+ {
+  "case": "16_ccx_one_control",
+  "category": "C-boundary",
+  "result": "PASS",
+  "detail": "got {\"001\": 1.0}"
+ },
+ {
+  "case": "17_angles_0_2pi_minus_pi",
+  "category": "C-boundary",
+  "result": "PASS",
+  "detail": "got {\"0\": 1.0}"
+ },
+ {
+  "case": "18_measure_only",
+  "category": "C-boundary",
+  "result": "PASS",
+  "detail": "got {\"00\": 1.0}"
+ },
+ {
+  "case": "19_formatting_torture",
+  "category": "C-boundary",
+  "result": "PASS",
+  "detail": "got {\"00\": 0.5, \"11\": 0.5}"
+ },
+ {
+  "case": "20_index_out_of_range",
+  "category": "C-boundary (must reject)",
+  "result": "PASS",
+  "detail": "raised QasmSyntaxError: qubit index 3 out of range for register 'q' of size 3 at line 5"
+ },
+ {
+  "case": "21_undefined_gate",
+  "category": "C-boundary (must reject)",
+  "result": "PASS",
+  "detail": "status=partial; line 4: gate 'foo' is not in the supported QSDK gate subset"
+ },
+ {
+  "case": "22_undeclared_register",
+  "category": "C-boundary (must reject)",
+  "result": "PASS",
+  "detail": "raised QasmSyntaxError: undeclared qubit register 'r' at line 4"
+ },
+ {
+  "case": "23_missing_semicolon",
+  "category": "C-boundary (must reject)",
+  "result": "FAIL",
+  "detail": "status=success; "
+ },
+ {
+  "case": "24_wrong_param_count",
+  "category": "C-boundary (must reject)",
+  "result": "PASS",
+  "detail": "raised QasmSyntaxError: gate 'rz' expects 1 parameter(s), got 0 at line 4"
+ },
+ {
+  "case": "25_cx_same_qubit",
+  "category": "C-boundary (must reject)",
+  "result": "FAIL",
+  "detail": "status=success; "
+ },
+ {
+  "case": "26_divide_by_zero",
+  "category": "C-boundary (must reject)",
+  "result": "FAIL",
+  "detail": "CRASH ZeroDivisionError: float division by zero"
+ },
+ {
+  "case": "27_duplicate_register",
+  "category": "C-boundary (must reject)",
+  "result": "PASS",
+  "detail": "raised QasmSyntaxError: duplicate register 'q' at line 4"
+ },
+ {
+  "case": "28_missing_header",
+  "category": "C-boundary (must reject)",
+  "result": "PASS",
+  "detail": "raised QasmSyntaxError: missing OPENQASM version header at line 1"
+ }
+]

@@ -1,0 +1,177 @@
+{
+ "01_bell_qasm2": {
+  "category": "A-sanity",
+  "why": "Basic Bell pair, QASM 2",
+  "dist": {
+   "00": 0.5,
+   "11": 0.5
+  }
+ },
+ "02_bell_qasm3": {
+  "category": "A-sanity",
+  "why": "Same Bell pair, QASM 3 syntax",
+  "dist": {
+   "00": 0.5,
+   "11": 0.5
+  }
+ },
+ "03_ghz3": {
+  "category": "B-scope",
+  "why": "3-qubit GHZ, QASM 3",
+  "dist": {
+   "000": 0.5,
+   "111": 0.5
+  }
+ },
+ "04_ccx_rz_demo": {
+  "category": "B-scope",
+  "why": "Demo circuit: h, cx, ccx, rz",
+  "dist": {
+   "000": 0.5,
+   "111": 0.5
+  }
+ },
+ "05_multi_register": {
+  "category": "B-scope",
+  "why": "Two registers map to global qubit order (a then b)",
+  "dist": {
+   "100": 1.0
+  }
+ },
+ "06_param_expressions": {
+  "category": "B-scope",
+  "why": "pi expressions: rx(pi), ry(0.5*pi)*2 = full flip, u3(pi,0,pi)=X",
+  "dist": {
+   "111": 1.0
+  }
+ },
+ "07_barrier_ok": {
+  "category": "B-scope",
+  "why": "Barrier is accepted and does not change the result",
+  "dist": {
+   "10": 1.0
+  }
+ },
+ "08_swap": {
+  "category": "B-scope",
+  "why": "swap moves the excitation",
+  "dist": {
+   "10": 1.0
+  }
+ },
+ "09_if_unsupported": {
+  "category": "B-scope (fail loudly)",
+  "why": "Classical conditional must be reported with its line",
+  "reject": true
+ },
+ "10_for_unsupported": {
+  "category": "B-scope (fail loudly)",
+  "why": "Loop must be reported with its line",
+  "reject": true
+ },
+ "11_gatedef_unsupported": {
+  "category": "B-scope (fail loudly)",
+  "why": "User gate definition must be reported",
+  "reject": true
+ },
+ "12_sx_no_qsdk_gate": {
+  "category": "B-scope (fail loudly)",
+  "why": "sx has no documented QSDK counterpart, must not be silently mapped",
+  "reject": true
+ },
+ "13_bitorder_q0": {
+  "category": "C-boundary",
+  "why": "x on q[0]: '001' means c[2]c[1]c[0] order",
+  "dist": {
+   "001": 1.0
+  }
+ },
+ "14_max_index_q2": {
+  "category": "C-boundary",
+  "why": "x on the highest index: '100'",
+  "dist": {
+   "100": 1.0
+  }
+ },
+ "15_ccx_both_controls": {
+  "category": "C-boundary",
+  "why": "Toffoli with both controls on flips the target",
+  "dist": {
+   "111": 1.0
+  }
+ },
+ "16_ccx_one_control": {
+  "category": "C-boundary",
+  "why": "Toffoli with one control on does nothing",
+  "dist": {
+   "001": 1.0
+  }
+ },
+ "17_angles_0_2pi_minus_pi": {
+  "category": "C-boundary",
+  "why": "rz(0), rz(2*pi), rz(-pi) on |0> keep probabilities",
+  "dist": {
+   "0": 1.0
+  }
+ },
+ "18_measure_only": {
+  "category": "C-boundary",
+  "why": "No gates at all: always 00",
+  "dist": {
+   "00": 1.0
+  }
+ },
+ "19_formatting_torture": {
+  "category": "C-boundary",
+  "why": "Comments, blank lines, several statements per line",
+  "dist": {
+   "00": 0.5,
+   "11": 0.5
+  }
+ },
+ "20_index_out_of_range": {
+  "category": "C-boundary (must reject)",
+  "why": "q[3] on a 3-qubit register",
+  "reject": true
+ },
+ "21_undefined_gate": {
+  "category": "C-boundary (must reject)",
+  "why": "Unknown gate name",
+  "reject": true
+ },
+ "22_undeclared_register": {
+  "category": "C-boundary (must reject)",
+  "why": "Register r never declared",
+  "reject": true
+ },
+ "23_missing_semicolon": {
+  "category": "C-boundary (must reject)",
+  "why": "Syntax error",
+  "reject": true
+ },
+ "24_wrong_param_count": {
+  "category": "C-boundary (must reject)",
+  "why": "rz needs 1 parameter",
+  "reject": true
+ },
+ "25_cx_same_qubit": {
+  "category": "C-boundary (must reject)",
+  "why": "Control and target are the same qubit",
+  "reject": true
+ },
+ "26_divide_by_zero": {
+  "category": "C-boundary (must reject)",
+  "why": "Constant expression divides by zero",
+  "reject": true
+ },
+ "27_duplicate_register": {
+  "category": "C-boundary (must reject)",
+  "why": "qreg declared twice",
+  "reject": true
+ },
+ "28_missing_header": {
+  "category": "C-boundary (must reject)",
+  "why": "No OPENQASM header",
+  "reject": true
+ }
+}
