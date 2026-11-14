@@ -16,6 +16,8 @@ import importlib
 import io
 import types
 
+from . import lowering
+from .errors import QasmConversionError
 from .ir import CircuitIR
 
 _ZERO_PARAM = {
@@ -119,11 +121,22 @@ def export_qasm(circuit):
     raise RuntimeError("QniverseCircuit.qasm() produced no QASM output")
 
 
-def build_circuit(ir):
+def _sdk_has(qgates, name):
+    """True when the installed SDK exposes this gate object."""
+    return hasattr(qgates, name)
+
+
+def build_circuit(ir, report=None):
     """Build a QniverseCircuit from a parsed CircuitIR.
 
     Returns the ``QniverseCircuit`` object. Assumes the IR passed validation
     (registers declared, indices in range); the parser guarantees this.
+
+    Gates are taken from the installed SDK whenever it exposes them. When a
+    gate is absent from the installed build, a decomposition from
+    ``lowering`` is substituted and recorded as a warning in ``report``
+    (when given) - the conversion never silently rewrites a gate. Gates
+    with no applicable rule raise QasmConversionError.
     """
     QniverseCircuit, QuantumRegister, ClassicalRegister, qgates = _require_sdk()
 
@@ -147,13 +160,34 @@ def build_circuit(ir):
 
     for op in ir.operations:
         if op.kind == "gate":
-            if op.name in _ZERO_PARAM:
-                gate = getattr(qgates, op.name)
-            elif op.name in _PARAM_GATES:
-                gate = getattr(qgates, op.name)(*op.params)
-            else:  # pragma: no cover - parser only emits mapped names
-                raise ValueError("no documented QSDK gate for %r" % op.name)
-            circuit.add_gate(gate, *[qubit(w) for w in op.qargs])
+            if _sdk_has(qgates, op.name):
+                steps = [(op.name, list(op.params), list(op.qargs))]
+            else:
+                steps = lowering.lower_steps(
+                    op.name, op.params, op.qargs,
+                    lambda n: _sdk_has(qgates, n),
+                )
+                if steps is None:
+                    raise QasmConversionError(
+                        "gate %r is not exposed by the installed QSDK build "
+                        "and no decomposition rule reaches it" % op.name,
+                    )
+                if report is not None:
+                    report.warn(
+                        "gate %r is not exposed by the installed QSDK build; "
+                        "substituted an equivalent decomposition (%s) - exact "
+                        "up to global phase, measurement outcomes unchanged"
+                        % (op.name, ", ".join(sorted({s[0] for s in steps}))),
+                        line=op.line,
+                    )
+            for step_name, step_params, step_wires in steps:
+                if step_name in _ZERO_PARAM:
+                    gate = getattr(qgates, step_name)
+                elif step_name in _PARAM_GATES:
+                    gate = getattr(qgates, step_name)(*step_params)
+                else:  # pragma: no cover - lowering only emits mapped names
+                    raise ValueError("no documented QSDK gate for %r" % step_name)
+                circuit.add_gate(gate, *[qubit(w) for w in step_wires])
         elif op.kind == "measure":
             circuit.add_gate(qgates.measure, qubit(op.qargs[0]), clbit(op.cargs[0]))
         elif op.kind == "barrier":

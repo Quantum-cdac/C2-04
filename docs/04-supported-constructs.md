@@ -51,3 +51,7 @@ Qubit order convention matches the QSDK documentation: the last argument is the 
 ## Register naming
 
 QSDK register names must be alphabetic, unique per circuit, and must not collide with gate or Python keyword names. The converter maps offending names to a safe alphabetic form (recorded in the report as a warning with old and new names); wire indices are unchanged.
+
+## Decomposition fallback (installed-SDK gate gaps)
+
+The builder always prefers the native QSDK gate. When the installed SDK build does not expose a mapped gate, `qasm2qniverse/lowering.py` substitutes a standard decomposition instead of failing: `ccx`, `cswap`, `cy`, `cz`, `ch`, `swap`, `crz`, `cp`/`cu1`, `cs`/`ct`/`csdg`/`ctdg`, `crx`, `cry`, `cu2`, `cu3`, and the phase-gate chain `u1`/`p`/`s`/`sdg`/`t`/`tdg`/`u2`/`u3`. Every substitution is recorded in the report as a warning with the source line. Rules are exact unitaries except where marked up to global phase (`p`->`rz`, `u3`->`rz/ry/rz` chain); a global phase never changes a measurement distribution. `tests/test_lowering.py` proves each rule against the reference simulator's matrices, including permuted operand orders. `c3x`/`c4x`/`c5x` have no ancilla-free rule: if the SDK lacks them, conversion raises a clear error rather than guessing. The rule set follows standard references and was cross-validated against a teammate's independent implementation of the same decompositions.

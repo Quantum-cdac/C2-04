@@ -24,7 +24,7 @@ def test_partial_source_raises_by_default_with_report():
 
 
 def test_allow_partial_is_explicitly_marked(monkeypatch):
-    monkeypatch.setattr(qasm2qniverse, "build_circuit", lambda ir: "circuit-stub")
+    monkeypatch.setattr(qasm2qniverse, "build_circuit", lambda ir, report=None: "circuit-stub")
     result = convert_qasm(PARTIAL, allow_partial=True)
     assert result.circuit == "circuit-stub"
     assert any("partial build" in w.message for w in result.report.warnings)
@@ -32,7 +32,7 @@ def test_allow_partial_is_explicitly_marked(monkeypatch):
 
 
 def test_clean_source_still_builds(monkeypatch):
-    monkeypatch.setattr(qasm2qniverse, "build_circuit", lambda ir: "circuit-stub")
+    monkeypatch.setattr(qasm2qniverse, "build_circuit", lambda ir, report=None: "circuit-stub")
     result = convert_qasm(
         "OPENQASM 2.0;\nqreg q[1];\ncreg c[1];\nh q[0];\nmeasure q[0] -> c[0];\n"
     )

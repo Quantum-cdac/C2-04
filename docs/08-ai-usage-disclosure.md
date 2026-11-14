@@ -9,10 +9,9 @@ Per the hackathon Development Rules ("AI tools are permitted for coding, debuggi
 
 ## What the team did with the output
 
-- Reviewed the generated code against the problem statement and the QSDK documentation (gate catalog, register rules, `add_gate` conventions).
-- Ran the offline test suite and demo; will run the SDK integration suite in the Qniverse environment and record results in `docs/05-test-plan-and-results.md`.
-- Each team member presenting this module can explain the architecture (parser -> IR -> documented QSDK builder), the supported subset, the register-renaming rule, and the statevector equivalence method.
+- Ran the SDK integration suite in the venue Qniverse notebook against the preinstalled SDK (4 passed, recorded with the manual Bell conversion figures in `docs/05-test-plan-and-results.md`).
+- Review of the generated code against the problem statement and the QSDK documentation, and the ability to explain the architecture (parser -> IR -> documented QSDK builder), the supported subset, the register-renaming rule and the equivalence method, remain the team's responsibility under the rules; the team members presenting this module are expected to complete that review before submission.
 
 ## Data handling
 
-No confidential information, credentials, personal data or restricted material was entered into external AI services. The Qniverse API key is never embedded in code, docs or messages; remote execution uses each member's own registered account.
+No account credentials or API keys were entered into any AI service, code, documentation or chat message in this workflow. The Qniverse API key is never embedded in code, docs or messages; remote execution uses each member's own registered account.

@@ -22,7 +22,7 @@ Building circuits needs the Qniverse QSDK (`pip install qniverse` per the offici
 
 ## Repository layout
 
-- `qasm2qniverse/` - package: `parser.py` (QASM 2.0/3.0 subset -> IR), `builder.py` (IR -> `QniverseCircuit`, documented QSDK APIs only), `simulator.py` (reference statevector engine for equivalence tests), `report.py`, `ir.py`, `errors.py`
+- `qasm2qniverse/` - package: `parser.py` (QASM 2.0/3.0 subset -> IR), `builder.py` (IR -> `QniverseCircuit`, documented QSDK APIs only), `lowering.py` (reported decomposition fallback for gates missing from the installed SDK), `simulator.py` (reference statevector engine for equivalence tests), `report.py`, `ir.py`, `errors.py`
 - `tests/` - parser, diagnostics, equivalence and QSDK integration suites
 - `examples/` - runnable QASM 2.0/3.0 samples incl. an unsupported-constructs showcase
 - `docs/` - SDLC and submission documents (requirements, backlog, design, supported constructs, test results, performance analysis, product documentation, AI-usage disclosure, team info)

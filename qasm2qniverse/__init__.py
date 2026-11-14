@@ -73,5 +73,5 @@ def convert_qasm(source, version=None, allow_partial=False):
             "an equivalent of the full source"
             % (report.mapped_operations, len(report.unsupported_statements))
         )
-    circuit = build_circuit(ir)
+    circuit = build_circuit(ir, report=report)
     return ConversionResult(circuit=circuit, ir=ir, report=report)

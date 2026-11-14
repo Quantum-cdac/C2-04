@@ -104,19 +104,23 @@ def _operation_matrix(op):
     return _gate_matrix(name, op.params)
 
 
-def simulate(ir, num_qubits=None):
+def simulate(ir, num_qubits=None, initial=None):
     """Return the statevector (numpy array) produced by the IR's gate operations.
 
     Measurement and barrier operations do not change the statevector; resets
-    are treated as unsupported here and raise ValueError.
+    are treated as unsupported here and raise ValueError. ``initial`` may
+    supply a starting statevector (default: the all-zero basis state).
     """
     wires = ir.qubit_wires()
     n = num_qubits if num_qubits is not None else len(wires)
     index_of = {wire: i for i, wire in enumerate(wires)}
     # Internally axis i of the tensor is wire i; flattened only at the end so
     # that wire 0 is the least significant bit of the basis index.
-    tensor = np.zeros([2] * n, dtype=complex)
-    tensor[(0,) * n] = 1.0
+    if initial is None:
+        tensor = np.zeros([2] * n, dtype=complex)
+        tensor[(0,) * n] = 1.0
+    else:
+        tensor = np.asarray(initial, dtype=complex).reshape([2] * n)
     for op in ir.operations:
         if op.kind in ("measure", "barrier"):
             continue
@@ -151,3 +155,28 @@ def _apply(tensor, matrix, targets, n):
 def fidelity(a, b):
     """|psi|^2 overlap between two statevectors."""
     return float(abs(np.vdot(a, b)) ** 2)
+
+
+def unitary(ir, num_qubits=None):
+    """The circuit's full unitary matrix, one column per basis state."""
+    wires = ir.qubit_wires()
+    n = num_qubits if num_qubits is not None else len(wires)
+    cols = []
+    for j in range(2 ** n):
+        basis = np.zeros(2 ** n, dtype=complex)
+        basis[j] = 1.0
+        cols.append(simulate(ir, n, initial=basis))
+    return np.array(cols).T
+
+
+def phase_equivalent(a, b, tol=1e-9):
+    """True when vectors or matrices a and b are equal up to a global phase."""
+    a = np.asarray(a, dtype=complex)
+    b = np.asarray(b, dtype=complex)
+    if a.shape != b.shape:
+        return False
+    inner = np.vdot(a, b)
+    norm = np.linalg.norm(a) * np.linalg.norm(b)
+    if norm == 0:
+        return False
+    return abs(abs(inner) - norm) <= tol * max(norm, 1.0)

@@ -84,3 +84,26 @@ measure q -> c;
 
     a, b = simulate(result.ir), simulate(reimported)
     assert abs(np.vdot(a, b)) ** 2 == pytest.approx(1.0)
+
+
+def test_multiregister_qasm3_build_and_round_trip():
+    """Multi-register QASM 3.0 source must build a real QniverseCircuit and
+    reproduce its statevector through the documented qasm() export. Covers
+    cross-register control/target, the riskiest wire mapping."""
+    src = """OPENQASM 3.0;
+qubit[2] a;
+qubit[1] b;
+bit[2] c;
+h a[0];
+cx a[0], b[0];
+measure a -> c;
+"""
+    result = convert_qasm(src)
+    assert result.report.status == "success"
+    assert result.circuit.__class__.__name__ == "QniverseCircuit"
+    reimported, report = parse_qasm(export_qasm(result.circuit))
+    assert not report.errors
+    import numpy as np
+
+    a, b = simulate(result.ir), simulate(reimported)
+    assert abs(np.vdot(a, b)) ** 2 == pytest.approx(1.0)
