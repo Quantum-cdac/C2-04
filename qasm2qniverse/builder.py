@@ -11,7 +11,9 @@ interfaces only (QSDK documentation, "Creating a Circuit" and "Quantum Gates"):
   ``reset`` take qubit wires
 """
 
+import contextlib
 import importlib
+import io
 import types
 
 from .ir import CircuitIR
@@ -96,6 +98,25 @@ def _require_sdk():
         _find("ClassicalRegister"),
         qgates,
     )
+
+
+def export_qasm(circuit):
+    """Return the circuit's QASM 2.0 text via the documented ``qasm()``.
+
+    The documented signature is ``qasm(self, shots=None)``. The venue SDK
+    build (lowercase ``qniverse``, verified 2026-11-14) prints the program
+    and returns ``None``, so capture stdout when the return value is not a
+    string. Raises RuntimeError if neither yields QASM text.
+    """
+    buf = io.StringIO()
+    with contextlib.redirect_stdout(buf):
+        out = circuit.qasm()
+    if isinstance(out, str) and out.strip():
+        return out
+    text = buf.getvalue()
+    if text.strip():
+        return text
+    raise RuntimeError("QniverseCircuit.qasm() produced no QASM output")
 
 
 def build_circuit(ir):

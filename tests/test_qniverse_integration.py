@@ -19,7 +19,7 @@ if (
         allow_module_level=True,
     )
 
-from qasm2qniverse import convert_qasm, parse_qasm  # noqa: E402
+from qasm2qniverse import convert_qasm, export_qasm, parse_qasm  # noqa: E402
 from qasm2qniverse.simulator import simulate  # noqa: E402
 
 BELL = """
@@ -41,9 +41,11 @@ def test_build_returns_qniverse_circuit():
 
 
 def test_round_trip_through_documented_qasm_export():
-    """qc.qasm() (documented) re-parsed must reproduce the same statevector."""
+    """qc.qasm() (documented) re-parsed must reproduce the same
+    statevector. Uses export_qasm, which also handles venue SDK
+    builds where qasm() prints instead of returning a string."""
     result = convert_qasm(BELL)
-    exported = result.circuit.qasm()
+    exported = export_qasm(result.circuit)
     reimported, report = parse_qasm(exported)
     assert not report.errors
     import numpy as np
@@ -76,7 +78,7 @@ u3(pi/3, pi/4, -pi/8) q[1];
 measure q -> c;
 """
     result = convert_qasm(src)
-    reimported, report = parse_qasm(result.circuit.qasm())
+    reimported, report = parse_qasm(export_qasm(result.circuit))
     assert not report.errors
     import numpy as np
 

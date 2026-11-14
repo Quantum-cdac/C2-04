@@ -16,6 +16,7 @@ from qasm2qniverse import (
     QasmSyntaxError,
     build_circuit,
     convert_qasm,
+    export_qasm,
     parse_qasm,
 )
 
@@ -48,7 +49,7 @@ def run(path):
         print("[Qniverse QSDK not installed here; circuit build skipped]")
         return
     print("--- QniverseCircuit.qasm() (documented SDK export) ---")
-    print(circuit.qasm())
+    print(export_qasm(circuit))
 
 
 def main():

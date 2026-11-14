@@ -3,12 +3,14 @@
 Public API:
     parse_qasm(source, version=None) -> (CircuitIR, ConversionReport)
     build_circuit(ir) -> QniverseCircuit (requires the Qniverse QSDK)
+    export_qasm(circuit) -> str (documented qasm() export; captures
+        stdout on SDK builds where qasm() prints instead of returning)
     convert_qasm(source, version=None) -> ConversionResult
 """
 
 from dataclasses import dataclass
 
-from .builder import build_circuit
+from .builder import build_circuit, export_qasm
 from .errors import QasmConversionError, QasmSyntaxError
 from .ir import CircuitIR, Operation, Register
 from .parser import parse_qasm
