@@ -55,3 +55,24 @@ crz(pi/4) q[0], q[1];
     result = convert_qasm(src)
     assert result.report.status == "success"
     assert math.isclose(result.ir.operations[0].params[0], math.pi / 2)
+
+
+def test_parameterized_round_trip_equivalence():
+    """Built circuit's documented qasm() export must reproduce the same
+    statevector, parameterized gates included - this validates the real
+    builder output, not just that a circuit object exists."""
+    src = """OPENQASM 2.0;
+qreg q[2];
+creg c[2];
+rx(pi/2) q[0];
+crz(pi/4) q[0], q[1];
+u3(pi/3, pi/4, -pi/8) q[1];
+measure q -> c;
+"""
+    result = convert_qasm(src)
+    reimported, report = parse_qasm(result.circuit.qasm())
+    assert not report.errors
+    import numpy as np
+
+    a, b = simulate(result.ir), simulate(reimported)
+    assert abs(np.vdot(a, b)) ** 2 == pytest.approx(1.0)

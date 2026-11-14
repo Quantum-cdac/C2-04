@@ -13,6 +13,10 @@ pip install qniverse              # Qniverse QSDK, needed to build circuits
 
 Python 3.8+. Inside the Qniverse JupyterLab the SDK is already available and only the first line is needed. No API key is needed to convert or to run the offline tests; remote execution on Qniverse backends uses the account API key from https://qniverse.in (profile dashboard) and is not part of conversion.
 
+## Running in the Qniverse Jupyter Notebook
+
+The platform's per-user Jupyter Notebook (side panel -> Launch Notebook; https://qniverse.in/docs/qniverse-labs-resources/) runs Python 3.9.13 with NumPy preinstalled - the converter's only hard dependency - so `python demo.py` works there as-is. First check `import Qniverse` in a cell: if the QSDK is present, the full suite including `tests/test_qniverse_integration.py` runs; if not, ask the organizers for the SDK distribution (public PyPI did not serve it on 2026-11-14).
+
 ## Usage
 
 ```python
