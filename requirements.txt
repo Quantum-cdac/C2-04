@@ -1,0 +1,6 @@
+numpy>=1.21
+pytest>=7.0
+# The Qniverse QSDK (pip install qniverse, Python 3.8+) is required only to
+# build QniverseCircuit objects (qasm2qniverse.builder) and for
+# tests/test_qniverse_integration.py. Parsing, reporting and the offline
+# equivalence tests run without it.

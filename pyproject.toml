@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "qasm2qniverse"
+version = "0.1.0"
+description = "OpenQASM 2.0/3.0 to QniverseCircuit converter (QC-C2-04)"
+requires-python = ">=3.8"
+dependencies = ["numpy>=1.21"]
+
+[project.optional-dependencies]
+test = ["pytest>=7.0"]
+
+[tool.setuptools.packages.find]
+include = ["qasm2qniverse*"]
